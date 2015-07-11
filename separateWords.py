@@ -171,7 +171,7 @@ while (s1.size()!=0 or s2.size()!=0):
 results=find_all_paths(graph,'start','',Query)
 a=[]
 max=0
-if len(results)>1:
+if len(results)>0:
     for j in results:
             if len(j)>max:
                     if max==len(j):
