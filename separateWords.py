@@ -1,4 +1,5 @@
 import time
+# Stack class to keep track of the associated words
 class Stack:
      def __init__(self):
          self.items = []
@@ -17,20 +18,23 @@ class Stack:
 
      def size(self):
          return len(self.items)
-        
+
+# definition to Search for all possible words present in the dictionary that can satisfy var_Query
 def SearchPossibleWords(var_Query):
     tempDictionary={}
     dictionaryElements=[]
     dictionaryElements.append(var_Query)
     initial=var_Query[0:1].lower()
     for x in dictionary:
+        # match first 2 characters of the string to improve performance by reducing the number of words to trace
         if x[0:1].lower()==initial:
+           # validating that the code works as case insensitive
            if x.lower() in var_Query.lower():
               if (var_Query.lower()).index(x.lower())==0:
                   dictionaryElements.append(x)
     return dictionaryElements
 
-
+# finding all the paths possible present in the graph
 def find_all_paths(graph, start, end,temp_key, path=[]):
         path = path + [start]
         #print path
@@ -56,31 +60,40 @@ def find_all_paths(graph, start, end,temp_key, path=[]):
                             paths.append(newpath)
         return paths
     
-start_time = time.time()
+start_time = time.time() # start time to measure the performance of long strings
+# some test cases to validate the code 
 #Query='FryBhindiFryPastaPizzaAalooParathaDumbiriyaniCappuccino'
 #Query='FryBhindiFryPastaPizzaAalooParathaDumbiriyaniCappuccinoPlainRiceHalfBotiMasalaNatiChickenNatiChickenGheeRoastChickenKabab'
-Query='FryBhindiFryPastaPizzaAalooParathaDumbiriyaniCappuccinoPlainRiceHalfBotiMasalaNatiChickenNatiChickenGheeRoastChickenKababDaalBaatiChurmaDaalFryBhindiFryPastaPizzaAalooParathaDumbiriyaniCappuccinoPlainRiceHalfBotiMasalaNatiChickenNatiChickenGheeRoastChickenKababDaalBaatiChurmaDaalFryBhindiFryPastaPizzaAalooParathaDumbiriyaniCappuccinoPlainRiceHalfBotiMasalaNatiChickenNatiChickenGheeRoastChickenKababDaalBaatiChurmaDaalFryBhindiFryPastaPizzaAalooParathaDumbiriyaniCappuccinoPlainRiceHalfBotiMasalaNati'
+Query='FryBhindiFryPastaPizzaAalooParathaDumbiriyaniCappuccinoPlainRiceHalfBotiMasalaNatiChickenNatiChickenGheeRoastChickenKababFryBhindiFryPastaPizzaAalooParathaDumbiriyaniCappuccinoPlainRiceHalfBotiMasalaNatiChickenNatiChickenGheeRoastChickenKabab'
+# dictionary of all the words that are expected to come in string 
 dictionary='Daal DaalBaati Cappuccino Aaloo Paratha Fry Pasta Pizza Bhindi Dumbiriyani Plain Rice Half Boti Masala Nati Chicken Ghee Roast Kabab'.split(' ')
+# Creating two stacks to keep track of the substrings after truncating the words present in the dictionary and calling them recursively
 s1=Stack()
 s2=Stack()
+# initialize and empty dictionary to keep track of all the possible combination of words sequence possible
 graph={}
+
 graph['start']=[SearchPossibleWords(Query)]
 s1.push(graph['start'][0])
-
+# keep truncating the string until stacks are empty
 while (s1.size()!=0 or s2.size()!=0):
        while s1.size()!=0:
              #print 'inside while of s1'
              a=s1.pop()
              #print a
              for x in a[1:]:
+                  #dont push Flaf is initialized to check if all the words have been trancated or not dontPushFlag=False if the string is fully truncated
                  dontPushFlag=False
+                 # Check if key is already present in graph if present the new combination of words will be appended in the array present in stack
                  if x in graph:
                      #print x
+                     # check if key is present in dictionary present in stack
                      if a[0][len(x):]!='' and x in a[0]:
                          # check if first element are same
                          key_present=0
                          #print "keypresent"
                          for i in graph[x]:
+                              # search for all the possible words with which the string may start
                              if i==SearchPossibleWords(a[0][len(x):]):
                                 key_present=1
                                 break
@@ -93,6 +106,7 @@ while (s1.size()!=0 or s2.size()!=0):
                          #print graph[x]
                          count=0
                          for i in graph[x]:
+                              # append if the ke is the last word of the string 
                               if i==['','']:
                                  count =1
                                  break
